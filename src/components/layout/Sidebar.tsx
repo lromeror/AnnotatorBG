@@ -1,8 +1,8 @@
 import { useAnnotator } from '../../context/AnnotatorContext'
+import { ClassManager } from '../annotator/ClassManager'
 
 export function Sidebar() {
-  const { images, activeImageId, setActiveImageId, classes, activeClassId, setActiveClassId } = useAnnotator()
-
+  const { images, activeImageId, setActiveImageId } = useAnnotator()
   const done  = images.filter(i => i.status === 'done').length
   const total = images.length
 
@@ -53,27 +53,19 @@ export function Sidebar() {
             key={img.id}
             onClick={() => setActiveImageId(img.id)}
             style={{
-              borderRadius: 6,
-              overflow: 'hidden',
+              borderRadius: 6, overflow: 'hidden',
               marginBottom: 8,
               border: `2px solid ${activeImageId === img.id ? 'var(--mg)' : 'transparent'}`,
-              cursor: 'pointer',
-              transition: 'border-color 0.15s',
+              cursor: 'pointer', transition: 'border-color 0.15s',
             }}
           >
             <div style={{
-              height: 52,
-              background: 'var(--surface2)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
+              height: 52, background: 'var(--surface2)',
+              display: 'flex', alignItems: 'center',
+              justifyContent: 'center', position: 'relative',
             }}>
-              <img
-                src={img.url}
-                alt={img.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
+              <img src={img.url} alt={img.name}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               {img.status === 'done' && (
                 <div style={{
                   position: 'absolute', top: 4, right: 4,
@@ -92,13 +84,10 @@ export function Sidebar() {
               )}
             </div>
             <div style={{
-              padding: '4px 8px',
-              fontSize: 10,
+              padding: '4px 8px', fontSize: 10,
               color: activeImageId === img.id ? 'var(--mg)' : 'var(--text-muted)',
               background: 'var(--surface)',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
             }}>
               {img.name}
             </div>
@@ -106,36 +95,8 @@ export function Sidebar() {
         ))}
       </div>
 
-      {/* Clases */}
-      <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)' }}>
-        <div style={{ fontSize: 10, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: 8 }}>
-          Clases
-        </div>
-        {classes.map(cls => (
-          <div
-            key={cls.id}
-            onClick={() => setActiveClassId(cls.id)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              padding: '5px 0', cursor: 'pointer',
-            }}
-          >
-            <div style={{
-              width: 10, height: 10, borderRadius: 2,
-              background: cls.color, flexShrink: 0,
-              outline: activeClassId === cls.id ? `2px solid ${cls.color}` : 'none',
-              outlineOffset: 2,
-            }}/>
-            <span style={{
-              fontSize: 12,
-              color: activeClassId === cls.id ? cls.color : 'var(--text-muted)',
-              fontWeight: activeClassId === cls.id ? 600 : 400,
-            }}>
-              {cls.id} · {cls.name}
-            </span>
-          </div>
-        ))}
-      </div>
+      {/* Gestor de clases */}
+      <ClassManager />
 
     </aside>
   )

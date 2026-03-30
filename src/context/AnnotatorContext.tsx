@@ -2,13 +2,6 @@ import { createContext, useContext, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { ImageFile, AnnotationClass, BoundingBox } from '../types/index'
 
-const DEFAULT_CLASSES: AnnotationClass[] = [
-  { id: 0, name: 'monto',  color: '#E5007D' },
-  { id: 1, name: 'fecha',  color: '#2d4270' },
-  { id: 2, name: 'firma',  color: '#f59e0b' },
-  { id: 3, name: 'cuenta', color: '#22c55e' },
-]
-
 interface AnnotatorContextType {
   images: ImageFile[]
   activeImageId: string | null
@@ -17,6 +10,7 @@ interface AnnotatorContextType {
   addImages: (files: ImageFile[]) => void
   setActiveImageId: (id: string) => void
   setActiveClassId: (id: number) => void
+  setClasses: (classes: AnnotationClass[]) => void
   saveAnnotations: (imageId: string, boxes: BoundingBox[]) => void
   removeImage: (id: string) => void
 }
@@ -27,7 +21,7 @@ export function AnnotatorProvider({ children }: { children: ReactNode }) {
   const [images, setImages] = useState<ImageFile[]>([])
   const [activeImageId, setActiveImageId] = useState<string | null>(null)
   const [activeClassId, setActiveClassId] = useState(0)
-  const [classes] = useState<AnnotationClass[]>(DEFAULT_CLASSES)
+  const [classes, setClasses] = useState<AnnotationClass[]>([])
 
   function addImages(newImages: ImageFile[]) {
     setImages(prev => {
@@ -71,6 +65,7 @@ export function AnnotatorProvider({ children }: { children: ReactNode }) {
       addImages,
       setActiveImageId,
       setActiveClassId,
+      setClasses,
       saveAnnotations,
       removeImage,
     }}>
