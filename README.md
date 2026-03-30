@@ -1,73 +1,58 @@
-# React + TypeScript + Vite
+# Annotator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Herramienta web para anotar imágenes con bounding boxes y generar datasets en formato YOLO listos para entrenar modelos de reconocimiento de imagen con darknet.
 
-Currently, two official plugins are available:
+## Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Carga múltiples imágenes (PNG, JPG, etc.)
+- Dibuja bounding boxes por clase con colores distintos
+- Clases predeterminadas: `monto`, `fecha`, `firma`, `cuenta`
+- Exporta el dataset como `.zip` con estructura YOLO:
+  ```
+  dataset_yolo.zip
+  ├── images/        # imágenes anotadas
+  ├── labels/        # archivos .txt con coordenadas normalizadas
+  ├── obj.names      # lista de clases
+  ├── obj.data       # configuración del dataset
+  └── train.txt      # rutas de entrenamiento
+  ```
 
-## React Compiler
+## Requisitos
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- [Node.js](https://nodejs.org/) v18 o superior
+- npm, yarn o pnpm
 
-## Expanding the ESLint configuration
+## Instalación y uso
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# 1. Clonar el repositorio
+git clone <url-del-repo>
+cd annotator
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# 2. Instalar dependencias
+npm install
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 3. Iniciar en modo desarrollo
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Abre el navegador en `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Compilar para producción
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
+npm run preview
 ```
+
+## Flujo de trabajo
+
+1. **Upload** — arrastra o selecciona las imágenes a anotar
+2. **Annotate** — dibuja bounding boxes sobre cada imagen y asigna la clase correspondiente
+3. **Export** — descarga el `.zip` listo para usar con darknet/YOLO
+
+## Tecnologías
+
+- React 19 + TypeScript
+- Vite
+- JSZip (generación del archivo de exportación)
